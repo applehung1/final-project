@@ -22,10 +22,10 @@
         <td>{{ item.category}}</td>
         <td>{{ item.title }}</td>
         <td class="text-right">
-          {{ item.origin_price }}
+          {{ $filters.currency(item.origin_price) }}
         </td>
         <td class="text-right">
-          {{ item.price }}
+          {{ $filters.currency(item.price) }}
         </td>
         <td>
           <span class="text-success" v-if="item.is_enabled">啟用</span>
@@ -42,6 +42,8 @@
       </tr>
     </tbody>
   </table>
+  <pagination :pages="pagination"
+  @emit-pages="getProducts"></pagination>
   <ProductModal ref="productModal"
   :product="tempProduct"
   @update-product="updateProduct"></ProductModal>
@@ -53,6 +55,7 @@
 <script>
 import ProductModal from '../components/ProductModal.vue'
 import DelModal from '../components/DelModal.vue'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   data () {
@@ -66,12 +69,13 @@ export default {
   },
   components: {
     ProductModal,
-    DelModal
+    DelModal,
+    Pagination
   },
-  inject: ['emitter'],
+  // inject: ['emitter'],
   methods: {
-    getProducts () {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`
+    getProducts (page = 1) {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`
       this.isLoading = true
       this.$http.get(api)
         .then((res) => {
@@ -107,20 +111,8 @@ export default {
       this.$http[httpMethod](api, { data: this.tempProduct }).then((response) => {
         console.log(response)
         productComponent.hideModal()
-        if (response.data.success) {
-          this.getProducts()
-          console.log(this.emitter)
-          this.emitter.emit('push-message', {
-            style: 'success',
-            title: '更新成功'
-          })
-        } else {
-          this.emitter.emit('push-message', {
-            style: 'danger',
-            title: '更新失敗',
-            content: response.data.message.join('、')
-          })
-        }
+        this.getProducts()
+        this.$httpMessageState(response, '更新')
       })
     },
     openDelProductModal (item) {

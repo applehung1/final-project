@@ -35,8 +35,6 @@
     </div>
 </template>
 <script>
-import mitt from 'mitt'
-const emitter = mitt()
 export default {
   data () {
     return {
@@ -60,19 +58,9 @@ export default {
             const { token, expired } = res.data
             document.cookie = `hexToken=${token}; expires=${new Date(expired).toUTCString()}`
             console.log(res)
-            console.log('emitter:', emitter)
-            emitter.emit('push-message', {
-              style: 'success',
-              title: '登入成功'
-            })
             this.$router.push('/dashboard/products')
             // 跳轉到dashboard頁面
-          } else {
-            emitter.emit('push-message', {
-              style: 'danger',
-              title: '登入失敗',
-              content: res.data.message.join('、')
-            })
+            this.$httpMessageState(res, '登入成功')
           }
         })
     }

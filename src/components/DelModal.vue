@@ -7,7 +7,7 @@
           <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>確定要刪除這個產品嗎？</p>
+          <p>確定要刪除嗎？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="hideModal">取消</button>
