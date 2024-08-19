@@ -145,6 +145,7 @@
 <script>
 import cartMixin from '@/mixins/cartMixin'
 export default {
+  emits: ['cart-updated'], // 在此處聲明自定義事件
   data () {
     return {
       products: [],
@@ -187,7 +188,12 @@ export default {
       this.$http.post(url, { data: cart })
         .then((res) => {
           this.status.loadingItem = ''
-          console.log(res)
+          console.log('addcart-res', res)
+          return this.getCart() // 確保返回的 Promise 是 this.getCart()
+        })
+        .then((res) => {
+          this.$emit('cart-updated', this.cart) // 發射事件通知父組件
+          console.log('觸發addCart', this.cartItemCount)
         })
     }
   },

@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import cartMixin from '@/mixins/cartMixin'
 export default {
   data () {
     return {
@@ -87,7 +88,11 @@ export default {
           this.isLoading = false
           this.status.loadingItem = ''
           this.$httpMessageState(response, '加入購物車')
-          //   this.$router.push('/user/cart')
+          return this.getCart() // 確保返回的 Promise 是 this.getCart()
+        })
+        .then((response) => {
+          this.$emit('cart-updated', this.cart) // 發射事件通知父組件
+          console.log('觸發updateCart', this.cartItemCount)
         })
     },
     increment () {
@@ -104,11 +109,11 @@ export default {
       }
     }
   },
-
   created () {
     this.id = this.$route.params.productId
     this.getProduct()
-  }
+  },
+  mixins: [cartMixin]
 }
 </script>
 

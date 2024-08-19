@@ -1,35 +1,35 @@
 <template>
   <header>
       <nav class="navbar navbar-expand-lg navbar-white bg-white">
-        <div class="container-fluid">
-        <router-link class="navbar-brand" to="/user/cart">Zhuzh</router-link>
+        <div class="logo">
+          <router-link class="navbar-brand" to="/user/cart"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
         </div>
-        <div class="menu">
-            <ul>
-                <li><router-link class="navbar-brand" to="/user">首頁<br>Home</router-link></li>
-                <li><router-link class="navbar-brand" to="/user">關於<br>About</router-link></li>
-                <li><router-link class="navbar-brand" to="/user/list">購買花禮<br>Online Shop</router-link></li>
-            </ul>
-            <div class="navbar-secondary">
-                <router-link class="navbar-brand" to="/login"><i class="bi bi-person-fill"></i></router-link>
-                <router-link class="navbar-brand" to="/user/cart" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"><i class="bi bi-handbag"></i></router-link>
-            </div>
-            <!-- 購物車內容 -->
-            <div v-if="showCart" class="cart-content" @mouseenter="showCart = true" @mouseleave="showCart = false">
-              <CartDisplay :cart="cart" />
-            </div>
+        <div>
+          <ul>
+            <li><router-link class="navbar-brand" to="/user">首頁<br>Home</router-link></li>
+            <li><router-link class="navbar-brand" to="/user">關於<br>About</router-link></li>
+            <li><router-link class="navbar-brand" to="/user/list">購買花禮<br>Online Shop</router-link></li>
+        </ul>
         </div>
-    </nav>
+        <div class="navbar-secondary">
+            <router-link class="navbar-brand" to="/login"><i class="bi bi-person-fill"></i></router-link>
+            <router-link class="navbar-brand" to="/user/cart" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"><i class="bi bi-handbag"></i></router-link>
+        </div>
+        <!-- 購物車內容 -->
+        <div v-if="showCart" class="cart-content" @mouseenter="showCart = true" @mouseleave="showCart = false">
+          <CartDisplay :cart="cart" />
+        </div>
+      </nav>
   </header>
   <div class="post">
     <img src="../assets/images/post.jpg" alt="post">
   </div>
   <div class="container-fluid mt-3 position-relative">
     <ToastMessages></ToastMessages>
-    <router-view/>
+    <router-view  @cart-updated="updateCartCount"/>
   </div>
   <router-link to="/user/cart">
-    <div class="floating-cart" @cart-updated="updateCartCount">
+    <div class="floating-cart">
       <i class="bi bi-cart3"></i>
       <!-- 顯示購物車內商品數量 -->
         <div v-if="cartItemCount > 0" class="cart-item-count">{{ cartItemCount }}</div>
@@ -37,14 +37,19 @@
   </router-link>
 </template>
 <style>
-.menu {
-    display: flex;
+/* *{outline: 1px solid #000;} */
+.logo img {
+  width: 100px;
 }
-.menu ul {
+.navbar {
+    display: flex;
+    justify-content: space-between; /* 讓 ul 置中 */
+}
+.navbar ul {
     display: flex;
     list-style-type: none;
 }
-.menu li,.navbar-secondary {
+.navbar li,.navbar-secondary {
     margin: 10px 20px 0px 40px;
 }
 .navbar-brand {
@@ -90,6 +95,10 @@
 .item-info {
   display: block; /* 確保價格在另一行顯示 */
   color: #333; /* 調整顏色 */
+}
+.post img {
+  width: 100%; /* 將圖片寬度設為100%，適應父容器 */
+  height: auto; /* 自動調整高度以保持圖片比例 */
 }
 .floating-cart {
   position: fixed;
@@ -160,6 +169,7 @@ export default {
       }, 500)
     },
     updateCartCount (cart) {
+      this.cart = cart
       this.cartItemCount = cart.carts.reduce((total, item) => total + item.qty, 0)
       console.log('updateCartCount:', this.cartItemCount)
     }
