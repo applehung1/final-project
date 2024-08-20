@@ -1,23 +1,33 @@
 <template>
   <Loading :active="isLoading"></Loading>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link to="/user/cart">購物車</router-link></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
-      </ol>
-    </nav>
+    <div class="row">
+      <!-- Breadcrumb 和標題部分 -->
+      <div class="col-8 container-top">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><router-link to="/user/cart"
+              style="text-decoration: none; color: inherit; font-weight: normal;">購物車</router-link></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
     <div class="row justify-content-center">
-      <article class="col-8">
-        <img :src="product.imageUrl" alt="" class="img-fluid mb-3">
-        <div>{{ product.content }}</div>
+      <article class="col-5">
+        <div class="text-center product-image-container">
+          <img :src="product.imageUrl" alt="" class="img-fluid mb-3 product-image">
+        </div>
       </article>
-      <div class="col-4">
-        <h2>{{ product.title }}</h2>
+      <div class="col-3 product-description-container">
+        <h3>{{ product.title }}</h3>
+        <br>
         <div>{{ product.description }}</div>
+        <hr style="width: 100%;">
         <div class="h5" v-if="!product.price">{{ product.origin_price }} 元</div>
-        <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
-        <div class="h5" v-if="product.price">現在只要 {{ product.price }} 元</div>
+        <del class="h6" v-if="product.price">$ {{ product.origin_price }} </del>
+        <div class="h5" v-if="product.price">$ {{ product.price }} </div>
+        <hr style="width: 100%;">
         <label for="price" class="form-label">購買數量</label>
         <div class="quantity-wrapper">
             <button class="btn btn-outline-secondary" @click="decrement">-</button>
@@ -31,7 +41,7 @@
             />
             <button class="btn btn-outline-secondary" @click="increment">+</button>
         </div>
-        <hr>
+        <hr style="width: 100%;">
         <button type="button" class="btn btn-outline-danger"
                 @click="addToCart(product.id, product.qty)">
         <div v-if="status.loadingItem === product.id" class="spinner-grow spinner-grow-sm text-danger" role="status">
@@ -39,13 +49,23 @@
         </div>
           加入購物車
         </button>
+        <button type="button" class="btn btn-outline-danger"
+                @click="addFavorite(product.id)">
+                <i class="bi bi-suit-heart-fill"></i> 加入收藏
+        </button>
       </div>
+    </div>
+    <div class="center-content col-8 mx-auto">
+      <p>商品特色</p>
+      <hr>
+      <div style="white-space: pre-wrap; text-align: left">{{ product.content }}</div>
     </div>
   </div>
 </template>
 
 <script>
 import cartMixin from '@/mixins/cartMixin'
+
 export default {
   data () {
     return {
@@ -56,7 +76,8 @@ export default {
       isLoading: false,
       status: {
         loadingItem: ''
-      }
+      },
+      favorite: ''
     }
   },
   methods: {
@@ -95,6 +116,14 @@ export default {
           console.log('觸發updateCart', this.cartItemCount)
         })
     },
+    addFavorite (id) {
+      const favorites = JSON.parse(localStorage.getItem('favoriteItems')) || []
+      if (!favorites.includes(id)) {
+        favorites.push(id)
+        localStorage.setItem('favoriteItems', JSON.stringify(favorites))
+      }
+      console.log('favorite emit:', id)
+    },
     increment () {
       this.product.qty += 1
     },
@@ -118,13 +147,30 @@ export default {
 </script>
 
 <style>
+/* *{outline: solid 1px #000;} */
+.container-top {
+  margin-left:220px;
+}
+.text-center {
+  text-align: center;
+}
+.product-image {
+  height: 500px;
+  width: auto;
+}
+.product-image-container {
+  padding-right: 40px; /* 調整圖片右側距離 */
+}
+.product-description-container {
+  padding-left: 50px; /* 調整段落左側距離 */
+}
 .quantity-wrapper {
   display: flex;
   align-items: center;
 }
 
 .quantity-wrapper .form-control {
-  width: 300px;
+  width: 150px;
   text-align: center;
 }
 
@@ -135,11 +181,30 @@ export default {
 
 .quantity-wrapper .btn:first-child {
   border-top-right-radius: 0;
-  border-bottom-right-radius: ;
-}0
+  border-bottom-right-radius: 0;
+}
 
 .quantity-wrapper .btn:last-child {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+
+.container .bi {
+  font-size:13px;
+}
+.btn-outline-danger {
+  margin-right: 10px;
+  background-color: #ffffff;
+  color: #949494;
+  border-color: #949494;
+}
+.btn-outline-danger:hover {
+  background-color: #949494; /* 鼠標懸停時的背景顏色 */
+  color: #ffffff; /* 鼠標懸停時的文字顏色 */
+  border-color: #949494; /* 鼠標懸停時的邊框顏色 */
+}
+.center-content {
+  text-align: center; /* 讓內部內容水平置中 */
+}
+
 </style>

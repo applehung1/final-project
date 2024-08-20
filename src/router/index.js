@@ -61,6 +61,10 @@ const routes = [
       {
         path: 'checkinfo',
         component: () => import('../views/UserInfoCheck.vue')
+      },
+      {
+        path: 'favorite',
+        component: () => import('../views/UserFavorite.vue')
       }
     ]
   }

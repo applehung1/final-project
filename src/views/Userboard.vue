@@ -13,6 +13,7 @@
         </div>
         <div class="navbar-secondary">
             <router-link class="navbar-brand" to="/login"><i class="bi bi-person-fill"></i></router-link>
+            <router-link class="navbar-brand" to="/user/favorite"><i class="bi bi-bookmark-heart-fill"></i></router-link>
             <router-link class="navbar-brand" to="/user/cart" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"><i class="bi bi-handbag"></i></router-link>
         </div>
         <!-- 購物車內容 -->
@@ -35,6 +36,9 @@
         <div v-if="cartItemCount > 0" class="cart-item-count">{{ cartItemCount }}</div>
     </div>
   </router-link>
+  <div v-if="showScrollTop" class="scroll-to-top" @click="scrollToTop">
+      <i class="bi bi-arrow-up"></i>
+  </div>
 </template>
 <style>
 /* *{outline: 1px solid #000;} */
@@ -102,9 +106,9 @@
 }
 .floating-cart {
   position: fixed;
-  bottom: 20px; /* 距離畫面底部20px */
+  bottom: 60px; /* 距離畫面底部20px */
   right: 20px; /* 距離畫面右側20px */
-  background-color: #DCC1B0; /* 藍色背景 */
+  background-color: #DCC1B0; /* 背景 */
   color: white; /* 白色字體 */
   width: 60px; /* 固定寬度，保持圓形 */
   height: 60px; /* 固定高度，保持圓形 */
@@ -134,6 +138,27 @@
   font-size: 12px;
   font-weight: bold;
 }
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+  background-color: #949494;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.scroll-to-top:hover {
+  opacity: 1;
+}
 </style>
 <script>
 import emitter from '@/methods/emitter'
@@ -148,7 +173,8 @@ export default {
       showCart: false, // 控制購物車內容顯示的狀態變數,
       status: {
         loadingItem: ''
-      }
+      },
+      showScrollTop: false // 控制箭頭圖標的顯示與隱藏
     }
   },
   mixins: [cartMixin],
@@ -158,7 +184,7 @@ export default {
   },
   methods: {
     handleMouseEnter () {
-      this.getCart() // 更新購物車內容
+      // this.getCart() // 更新購物車內容
       setTimeout(() => {
         this.showCart = true // 延遲顯示購物車內容
       }, 300) // 300毫秒的延遲，可以根據需要調整
@@ -172,6 +198,14 @@ export default {
       this.cart = cart
       this.cartItemCount = cart.carts.reduce((total, item) => total + item.qty, 0)
       console.log('updateCartCount:', this.cartItemCount)
+    },
+    handleScroll () {
+      // 當滾動高度超過300px時顯示箭頭
+      this.showScrollTop = window.scrollY > 200
+    },
+    scrollToTop () {
+      // 平滑滾動回頂部
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   },
   provide () {
@@ -181,6 +215,14 @@ export default {
   },
   created () {
     this.getCart()
+  },
+  mounted () {
+    // 監聽滾動事件
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeUnmount () {
+    // 移除滾動事件監聽
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>

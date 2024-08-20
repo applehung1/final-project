@@ -14,7 +14,9 @@ import {
 import * as rules from '@vee-validate/rules' // 正確導入規則
 import { localize, setLocale } from '@vee-validate/i18n'
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
+import mitt from 'mitt'
 
+const emitter = mitt()
 const app = createApp(App)
 app.config.globalProperties.$filters = {
   date,
@@ -34,6 +36,8 @@ setLocale('zh_TW')
 
 // 此函式的用途是整合 Ajax 的錯誤事件，統一整理發送給予 Toast 處理
 app.config.globalProperties.$httpMessageState = $httpMessageState
+
+app.config.globalProperties.emitter = emitter
 
 app.use(VueAxios, axios)
 app.use(router)
