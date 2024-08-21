@@ -12,12 +12,18 @@
               class="text-decoration-none align-self-start"
               to="/"
             >
-              <h2 class="fs-4 fw-bold text-white mb-5 mb-xl-2 me-3">
+              <h6 class="fw-bold text-white">
                 Zhuzh
-              </h2>
+              </h6>
               <hr class="custom-hr">
             </router-link>
-            <p class="text-secondary fw-bold text-indent-n1 mb-0 ms-3 pb-2">
+            <ul class="information">
+                <li><i class="bi bi-geo-alt-fill"></i> 台北市大安區大安路一段31巷26號1樓</li>
+                <li><i class="bi bi-phone-fill"></i> (02)2731-2821</li>
+                <li><i class="bi bi-envelope-open-fill"></i> sundiaflower@gmail.com</li>
+                <li><i class="bi bi-clock-fill"></i> 星期一至星期六 11:00 a.m – 08:00 p.m. 星期天 11:00 a.m – 06:00 p.m.</li>
+            </ul>
+            <p class="text-white" style="text-align: center;">
               © 2024. 版面設計修改自Sundia桑迪亞國際花藝，圖片來自於Sundia桑迪亞國際花藝。此網站為個人作品展示，非商業使用。
             </p>
           </div>
@@ -50,5 +56,10 @@ width: 100%; /* 占滿全寬 */
 .custom-hr {
   color: white;
   height: 2px;
+}
+.information li {
+  color: white;
+  font-size: 14px;
+  list-style-type: none;
 }
 </style>

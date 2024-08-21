@@ -4,14 +4,13 @@
     <div class="container-inside">
       <aside id="sidebar" class="left-sidebar col-md-3">
         <h4 class="widget-title">購買花禮Online Shop</h4>
+        <hr>
         <div class='search-area'>
           <input type="text" class="form-control" name="name"
         placeholder="(請輸入商品名稱)"
         v-model="searchQuery">
           <i class="bi bi-search search-icon" @click="performSearch"></i> <!-- 新增搜尋按鈕 -->
         </div>
-        <div class="tab-content">
-          <div class="widget">
             <div class="widget_categories">
               <ul>
                 <li v-for="(item, index) in uniqueCategories" :key="index"
@@ -22,8 +21,6 @@
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
       </aside>
       <div class="col-md-9">
         <header class="content-top clearfix">
@@ -38,12 +35,13 @@
                 </select>
             </div>
             <ul class="breadcrumb">
-              <li>首頁</li>
+              <li><router-link class="home-router-li" to="/">首頁</router-link></li>
               <li>/</li>
               <li>購買花禮Online Shop</li>
             </ul>
           </div>
         </header>
+        <hr>
         <div class="product-grid">
           <!-- 修改 v-for 循環，使用 filteredProducts -->
           <div class="product-item" v-for="item in filteredProducts" :key="item.id">
@@ -89,6 +87,11 @@
 .container-inside {
   display: flex;
 }
+.left-sidebar hr {
+  width: 86%;
+  margin-left: 32px; /* 往右移 */
+}
+
 .search-area {
   margin-left: 32px;
   position: relative; /* 讓子元素相對於父元素定位 */
@@ -122,8 +125,7 @@
 }
 
 .widget-title {
-  border-bottom: 0.5px solid #ddd;
-  padding: 20px 0px 20px 0px;
+  padding: 20px 0px 20px 30px;
 }
 
 .widget_categories ul li {
@@ -156,10 +158,16 @@
 .breadcrumb li{
   margin-left: 5px;
 }
+.home-router-li {
+  text-decoration: none;
+  color: inherit;
+}
+
 .product-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px; /* 控制商品間的間距 */
+  padding-top: 10px;
 }
 
 .product-item {
@@ -173,7 +181,13 @@
 
 .product-item-list {
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
+
+.product-item-list:hover {
+  transform: scale(1.05); /* 放大 5% */
+}
+
 .title-cart {
   display: flex;
   justify-content: space-between;

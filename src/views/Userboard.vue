@@ -1,6 +1,6 @@
 <template>
   <header>
-      <nav class="navbar navbar-expand-lg navbar-white bg-white">
+      <nav class="navbar navbar-white bg-white">
         <div class="logo">
           <router-link class="navbar-brand" to="/user/cart"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
         </div>
@@ -46,23 +46,33 @@
 .logo img {
   width: 100px;
 }
+.logo {
+  margin-right: auto; /* 確保logo佔據適當的空間 */
+}
+
 .navbar {
-    display: flex;
-    justify-content: space-between; /* 讓 ul 置中 */
+  margin: 0 auto; /* 置中對齊 */
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* 讓 ul 置中 */
+  align-items: center; /* 確保內容在垂直方向上居中 */
+  padding: 0 20px;
 }
 .navbar ul {
-    display: flex;
-    list-style-type: none;
+  display: flex;
+  list-style-type: none;
+  padding: 0; /* 移除 padding */
 }
 .navbar li,.navbar-secondary {
-    margin: 10px 20px 0px 40px;
+  margin: 10px 20px 0px 40px;
 }
 .navbar-brand {
-    font-size: 15px !important;
-    color:#7c7575;
+  font-size: 15px !important;
+  color:#7c7575;
 }
 .navbar-secondary {
   display: flex;
+  margin-left: auto; /* 推到右邊 */
 }
 .bi {
   font-size: 20px

@@ -61,7 +61,7 @@
     </div>
     <p class="products-more jump-animation" @click="getUserList()"><i class="bi bi-arrow-right"></i>  點我看更多商品</p>
     <div class='seperator'></div>
-    <h2>Products Articles</h2>
+    <h2>Product Articles</h2>
     <hr>
     <!-- 文章列表 -->
     <div class="article-container">
