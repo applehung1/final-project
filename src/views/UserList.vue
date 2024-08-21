@@ -91,7 +91,7 @@
 </template>
 
 <style>
-*{outline: 1px solid #000;}
+/* *{outline: 1px solid #000;} */
 .container-inside {
   display: flex;
 }
@@ -234,6 +234,7 @@
 
 <script>
 import cartMixin from '@/mixins/cartMixin'
+
 export default {
   emits: ['cart-updated'], // 在此處聲明自定義事件
   data () {

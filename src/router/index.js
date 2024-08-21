@@ -34,6 +34,10 @@ const routes = [
       {
         path: 'coupons',
         component: () => import('../views/Coupons.vue')
+      },
+      {
+        path: 'articles',
+        component: () => import('../views/Articles.vue')
       }
     ]
   },
@@ -72,7 +76,16 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) { // 加入路由設定讓每個頁面進入時為頂端
+    if (savedPosition) {
+      // 有savedPosition，則返回滾動至該位置
+      return savedPosition
+    } else {
+      // 否則，滾動至頂部
+      return { top: 0 }
+    }
+  }
 })
 
 export default router

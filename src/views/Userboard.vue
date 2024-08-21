@@ -39,6 +39,7 @@
   <div v-if="showScrollTop" class="scroll-to-top" @click="scrollToTop">
       <i class="bi bi-arrow-up"></i>
   </div>
+  <UserFooter></UserFooter>
 </template>
 <style>
 /* *{outline: 1px solid #000;} */
@@ -165,6 +166,7 @@ import emitter from '@/methods/emitter'
 import ToastMessages from '@/components/ToastMessages.vue'
 import cartMixin from '@/mixins/cartMixin'
 import CartDisplay from '@/components/CartDisplay.vue'
+import UserFooter from '@/components/UserFooter.vue'
 export default {
   data () {
     return {
@@ -180,7 +182,8 @@ export default {
   mixins: [cartMixin],
   components: {
     ToastMessages,
-    CartDisplay
+    CartDisplay,
+    UserFooter
   },
   methods: {
     handleMouseEnter () {

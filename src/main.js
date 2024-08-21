@@ -6,6 +6,8 @@ import router from './router'
 import Loading from 'vue3-loading-overlay'
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min'
 import { currency, date } from './methods/filters'
 import $httpMessageState from './methods/pushMessageState'
 import {
@@ -38,6 +40,7 @@ setLocale('zh_TW')
 app.config.globalProperties.$httpMessageState = $httpMessageState
 
 app.config.globalProperties.emitter = emitter
+app.provide('emitter', emitter)
 
 app.use(VueAxios, axios)
 app.use(router)
