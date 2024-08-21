@@ -6,7 +6,7 @@
         </div>
         <div>
           <ul>
-            <li><router-link class="navbar-brand" to="/user">首頁<br>Home</router-link></li>
+            <li><router-link class="navbar-brand" to="/">首頁<br>Home</router-link></li>
             <li><router-link class="navbar-brand" to="/user">關於<br>About</router-link></li>
             <li><router-link class="navbar-brand" to="/user/list">購買花禮<br>Online Shop</router-link></li>
         </ul>

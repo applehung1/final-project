@@ -62,17 +62,12 @@
                             <i class="bi bi-cart-fill"></i>
                         </button>
                    </div>
-            </div>
+              </div>
               <div class="price">
                 <div class="h5" v-if="!item.price">{{ item.origin_price }} </div>
                 <del class="h6" v-if="item.price">$ {{ item.origin_price }} </del>
                 <div class="h7" v-if="item.price">$ {{ item.price }} </div>
               </div>
-<!--
-            <div class="btn-group btn-group-sm">
-              <button type="button" class="btn btn-outline-secondary" @click="getProduct(item.id)">查看更多</button>
-            </div>
-             -->
           </div>
           <!-- 動態添加占位符 -->
           <div
@@ -85,8 +80,7 @@
     </div>
       <!-- 購物車列表 -->
       <!-- form -->
-      <div class="my-5 row justify-content-center">
-      </div>
+      <div class="my-5 row justify-content-center"></div>
   </div>
 </template>
 

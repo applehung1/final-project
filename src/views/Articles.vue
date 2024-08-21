@@ -9,15 +9,14 @@
       <table class="table mt-4">
       <thead>
         <tr>
-          <th width="120">標題</th>
-          <th>文章內容</th>
-          <th>圖片</th>
-          <th>tag</th>
-          <th >建立日期</th>
-          <th >作者</th>
-          <th >是否公開</th>
-          <th >文章內容</th>
-          <th >更新</th>
+          <th width="300">標題</th>
+          <th width="400">文章概述</th>
+          <th>標籤</th>
+          <th>建立日期</th>
+          <th>作者</th>
+          <th>是否公開</th>
+
+          <th>更新</th>
         </tr>
       </thead>
       <tbody>
@@ -26,9 +25,7 @@
           <td class="text-right">
             {{ item.description }}
           </td>
-          <td class="text-right">
-            {{ item.image }}
-          </td>
+
           <td class="text-right">
             {{ item.tag }}
           </td>
@@ -39,11 +36,8 @@
             {{ item.author }}
           </td>
           <td>
-            <span class="text-success" v-if="item.isPublic">啟用</span>
-            <span class="text-muted" v-else>未啟用</span>
-          </td>
-          <td>
-            {{ item.content }}
+            <span class="text-success" v-if="item.isPublic">公開</span>
+            <span class="text-muted" v-else>未公開</span>
           </td>
           <td>
             <div class="btn-group">
@@ -56,6 +50,8 @@
         </tr>
       </tbody>
     </table>
+    <pagination :pages="pagination"
+    @emit-pages="getArticles"></pagination>
     <ArticleModal ref="articleModal"
     :article="tempArticle"
     @update-article="updateArticle"></ArticleModal>
@@ -67,10 +63,12 @@
 <script>
 import ArticleModal from '../components/articleModal.vue'
 import DelModal from '../components/DelModal.vue'
+import Pagination from '@/components/Pagination.vue'
 export default {
   data () {
     return {
       articles: [],
+      pagination: {},
       tempArticle: {},
       isLoading: false,
       isNew: false
@@ -78,11 +76,12 @@ export default {
   },
   components: {
     ArticleModal,
-    DelModal
+    DelModal,
+    Pagination
   },
   methods: {
-    getArticles () {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/articles`
+    getArticles (page = 1) {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/articles/?page=${page}`
       this.isLoading = true
       this.$http.get(api)
         .then((res) => {
@@ -99,17 +98,17 @@ export default {
         this.tempArticle = {}
         this.tempArticle.isPublic = false
       } else {
-        const api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
+        // 這邊特別把api前方的'/'隱藏，如果出現404可以把它加回去
         console.log(api)
-        // this.isLoading = true
+        this.isLoading = true
         this.$http.get(api)
           .then((res) => {
-            console.log(res)
-            // this.tempArticle = JSON.parse(JSON.stringify(item))
-            // this.tempArticle.content = res.data.item.content
-            // this.isLoading = false
+            this.tempArticle = { ...item }
+            this.tempArticle = JSON.parse(JSON.stringify(item))
+            this.tempArticle.content = res.data.article.content
+            this.isLoading = false
           })
-        // this.tempArticle = { ...item }
       }
       this.isNew = isNew
       const articleComponent = this.$refs.articleModal

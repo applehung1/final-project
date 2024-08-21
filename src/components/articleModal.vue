@@ -14,7 +14,7 @@
         </div>
         <div class="modal-body">
                     <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
               <div class="mb-3">
                 <label for="title" class="form-label">標題</label>
                 <input
@@ -27,13 +27,14 @@
               </div>
               <div class="row gx-2">
                 <div class="mb-3 col-md-6">
-                  <label for="description" class="form-label">文章內容</label>
-                  <input
+                  <label for="description" class="form-label">文章概述</label>
+                  <textarea
                     type="text"
                     class="form-control"
                     id="description"
                     v-model="tempArticle.description"
-                    placeholder="請輸入文章內容"
+                    placeholder="請輸入文章概述"
+                    style="width: 100%; height: 150px;"
                   />
                 </div>
                 <div class="col-sm-4">
@@ -63,7 +64,7 @@
                   <img class="img-fluid" :src="tempArticle.imageUrl" alt="" />
                 </div>
                 <div class="mb-3 col-md-6">
-                  <label for="tag" class="form-label">tag</label>
+                  <label for="tag" class="form-label">標籤</label>
                   <input
                     type="text"
                     class="form-control"
@@ -98,14 +99,15 @@
                 </div>
               </div>
               <div class="row gx-2">
-                <div class="mb-3 col-md-6">
+                <div class="mb-3 col-md-12">
                   <label for="content" class="form-label">內容</label>
-                  <input
+                  <textarea
                     type="text"
                     class="form-control"
                     id="content"
                     v-model="tempArticle.content"
                     placeholder="請輸入文章內容"
+                    style="width: 100%; height: 100px;"
                   />
                 </div>
               </div>
@@ -161,8 +163,8 @@ export default {
       handler (newArticle) {
         this.tempArticle = { ...newArticle }
         // 如果沒有到期日，設置為今天的日期
-        if (!this.tempArticle.due_date) {
-          this.tempArticle.due_date = Math.floor(Date.now() / 1000)
+        if (!this.tempArticle.create_at) {
+          this.tempArticle.create_at = Math.floor(Date.now() / 1000)
         }
       }
     }

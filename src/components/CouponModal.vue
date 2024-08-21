@@ -109,7 +109,7 @@ export default {
   },
   watch: {
     coupon: {
-      immediate: true, // 確保在組件初始化時就觸發
+      immediate: true, // 確保coupon在組件初始化時就觸發，否則程式會在讀取props傳入之前就讀取tempCoupon.title
       handler (newCoupon) {
         this.tempCoupon = { ...newCoupon }
         // 如果沒有到期日，設置為今天的日期

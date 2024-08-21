@@ -2,14 +2,17 @@
   <Loading :active="isLoading"></Loading>
   <header>
     <div class="side-nav">
-      <router-link class="navbar-brand" to="/user/cart"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
+      <router-link class="navbar-brand" to="/"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
       <div class="icons">
         <router-link class="navbar-brand" to="/user/list"><i class="bi bi-shop-window"></i></router-link>
         <router-link class="navbar-brand" to="/user/favorite"><i class="bi bi-bookmark-heart-fill"></i></router-link>
-        <router-link class="navbar-brand" to="/user/cart" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"><i class="bi bi-handbag"></i></router-link>
+        <router-link class="navbar-brand" to="/user/cart"><i class="bi bi-handbag"></i></router-link>
+      </div>
+      <div class="arrow-down">
+        <i class="bi bi-arrow-down-circle"></i>
       </div>
     </div>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="../assets/images/home_ad1.jpg" class="d-block w-100" alt="...">
@@ -32,6 +35,7 @@
   <h2>Products</h2>
   <hr>
   <div class="container">
+    <!-- 商品列表 -->
     <div class="row">
       <div class="col-md-4 mb-4" v-for="item in limitedProducts" :key="item.id">
         <div class="product-container">
@@ -51,11 +55,42 @@
                   <i class="bi bi-cart-fill"></i>
             </button>
           </div>
+          <p style="color: #CE0000;">${{ item.price }}</p>
         </div>
       </div>
     </div>
-      <p class="products-more" @click="getUserList()">看更多商品 >></p>
+    <p class="products-more jump-animation" @click="getUserList()"><i class="bi bi-arrow-right"></i>  點我看更多商品</p>
+    <div class='seperator'></div>
+    <h2>Products Articles</h2>
+    <hr>
+    <!-- 文章列表 -->
+    <div class="article-container">
+      <div class="row">
+        <div class="col-md-12" v-for="(article,index) in articles" :key="article.id">
+          <div
+          class="row mb-2"
+          :class="[index === (ArticlesNum - 1) ? '' : 'mb-md-4']"
+        >
+          <div
+            class="col-md-6"
+            :class="[index%2 === 0 ? '' : 'order-md-1 offset-md-1']"
+          >
+          <img :src="article.imageUrl" alt="article image" class="img-fluid" />
+          </div>
+          <div class="col-md-4 offset-md-1 d-flex flex-column justify-content-center py-3">
+            <h3 class="fs-4 fw-bold mb-3">
+              {{ article.title }}
+            </h3>
+            <p class="text-secondary text-prewrap mb-3">
+              {{ article.description }}
+            </p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <UserFooter></UserFooter>
 </template>
 
 <style>
@@ -78,11 +113,30 @@ header {
 .side-nav img {
   width: 100px; /* logo寬度設定*/
 }
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+.arrow-down {
+  margin-top: 310px;
+  text-align: center;
+}
+.arrow-down i {
+  font-size: 22px;
+  color: #8b7575c9;
+  display: inline-block; /* 使圖示能夠使用 transform */
+  animation: bounce 1s ease-in-out infinite;
+  /* 1s 表示動畫的持續時間，ease-in-out 表示動畫的加速和減速方式，infinite 表示動畫將無限次循環 */
+}
 .carousel-item img {
   object-fit: cover; /* 避免圖片拉伸 */
 }
 .seperator {
-  height: 200px;
+  height: 100px;
 }
 div h2 {
   text-align: center; /* 使內容置中 */
@@ -95,9 +149,8 @@ div h2 {
   width: 100%; /* 設定容器寬度以適應父元素 */
 }
 .product-image-grid {
-  height: 100%; /* 使圖片填滿容器 */
+  height: 300px; /* 使圖片填滿容器 */
   width: auto; /* 自動調整寬度以保持比例 */
-  object-fit: cover; /* 保持比例並填滿容器 */
   background-size: cover; /* 確保背景圖片覆蓋容器 */
   background-position: center; /* 圖片居中 */
   transition: transform 0.3s ease; /* 添加過渡效果 */
@@ -105,9 +158,26 @@ div h2 {
 .product-image-grid:hover {
   transform: scale(1.1); /* 鼠標懸停時放大 */
 }
+.article-container {
+  display: flex;
+  align-items: center;
+  padding: 15px 0; /* 給上下邊緣增加一些間距 */
+}
+
+.article-container img {
+  width: 80%; /* 確保圖片在其容器中填滿寬度 */
+  height: auto; /* 保持圖片的寬高比例 */
+  object-fit: cover; /* 確保圖片覆蓋整個區域而不變形 */
+  border-radius: 5px; /* 設定圓角 */
+  transition: transform 0.3s ease; /* 添加過渡效果以實現平滑移動 */
+}
+.article-container img:hover {
+  transform: translateX(10px); /* 當鼠標移動到圖片上時，向右移動10px */
+}
 .title-cart {
   display: flex;
   justify-content: space-between;
+  margin-top: 15px; /* 增加 margin 來將 .title-cart 下移 */
 }
 .title-cart .btn {
   color: #777;
@@ -143,18 +213,39 @@ div h2 {
 .products-more:hover {
   cursor: pointer;
 }
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.jump-animation {
+  display: inline-block; /* 使文字能夠使用transform */
+  animation: jump 1s ease-in-out infinite;
+  /* 1s 表示動畫的持續時間，ease-in-out 表示動畫的加速和減速方式，infinite 表示動畫將無限次循環 */
+}
 </style>
 
 <script>
+import UserFooter from '@/components/UserFooter.vue'
 export default {
   data () {
     return {
+      ArticlesNum: 3,
       products: [],
+      articles: [],
+      articlesData: [],
       isLoading: false,
       status: {
         loadingItem: ''
       }
     }
+  },
+  components: {
+    UserFooter
   },
   methods: {
     getProducts () {
@@ -172,9 +263,24 @@ export default {
     },
     getUserList () {
       this.$router.push('/user/list')
+    },
+    getArticles () {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/articles`
+      this.isLoading = true
+      this.$http.get(api)
+        .then((res) => {
+          this.articlesData = res.data.articles
+          this.articles = this.articlesData.slice(0, this.ArticlesNum)
+          console.log('articles:', res)
+          this.isLoading = false
+        })
+        .catch((err) => {
+          this.$httpMessageState(err.response, '取得近期文章')
+        })
     }
   },
   created () {
+    this.getArticles()
     this.getProducts()
   },
   computed: {

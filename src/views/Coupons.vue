@@ -85,6 +85,7 @@ export default {
     openCouponModal (isNew, item) {
       if (isNew) {
         this.tempCoupon = {}
+        this.tempCoupon.is_enabled = 0
       } else {
         this.tempCoupon = { ...item }
       }
