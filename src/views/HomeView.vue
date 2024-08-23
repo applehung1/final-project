@@ -227,6 +227,103 @@ div h2 {
   animation: jump 1s ease-in-out infinite;
   /* 1s 表示動畫的持續時間，ease-in-out 表示動畫的加速和減速方式，infinite 表示動畫將無限次循環 */
 }
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column; /* 將 header 中的元素改為垂直排列 */
+    align-items: center;
+  }
+
+  .icons {
+    flex-direction: row;
+    justify-content: space-around;
+    height: auto; /* 調整 icons 容器的高度 */
+    width: 100%; /* 讓 icons 容器填滿整個寬度 */
+    margin-top: 10px;
+  }
+
+  .icons i {
+    font-size: 18px;
+  }
+
+  .arrow-down {
+    margin-top: 20px;
+  }
+
+  .carousel-item img {
+    height: 200px; /* 調整輪播圖片的高度 */
+    object-fit: cover;
+  }
+
+  .seperator {
+    height: 50px;
+  }
+
+  div h2 {
+    font-size: 20px; /* 調整標題字體大小 */
+  }
+
+  .product-container {
+    height: auto; /* 自動調整容器高度 */
+    margin-bottom: 20px; /* 每個產品之間增加一點間距 */
+  }
+
+  .product-image-grid {
+    height: 200px; /* 調整圖片的高度 */
+    width: 100%; /* 確保圖片填滿容器寬度 */
+  }
+
+  .title-cart {
+    flex-direction: column; /* 將標題和購物車圖標改為垂直排列 */
+    align-items: center; /* 居中對齊 */
+    text-align: center; /* 讓文字居中 */
+  }
+
+  .title-cart p {
+    margin-bottom: 10px; /* 增加標題與按鈕之間的間距 */
+  }
+
+  .article-container {
+    flex-direction: column; /* 使文章容器改為垂直排列 */
+    padding: 10px;
+  }
+
+  .article-container img {
+    width: 100%; /* 確保圖片在其容器中填滿寬度 */
+    margin-bottom: 15px; /* 增加圖片與文字之間的間距 */
+  }
+
+  .products-more {
+    text-align: center; /* 讓“查看更多商品”連結在手機上居中 */
+    font-size: 14px;
+  }
+
+  .jump-animation {
+    font-size: 16px; /* 調整動畫文本的大小 */
+  }
+
+  .row {
+    margin: 0; /* 移除行與行之間的邊距 */
+  }
+
+  .col-md-4, .col-md-6, .col-md-12 {
+    flex-basis: 100%; /* 讓 col-* 在手機上佔滿整行 */
+    max-width: 100%;
+  }
+
+  .carousel-control-prev, .carousel-control-next {
+    display: none; /* 隱藏輪播控制按鈕 */
+  }
+
+  /* 調整文章區塊 */
+  .col-md-6 {
+    order: 1; /* 保持圖片和描述的順序一致 */
+  }
+
+  .offset-md-1 {
+    margin-left: 0; /* 移除偏移 */
+  }
+}
 </style>
 
 <script>

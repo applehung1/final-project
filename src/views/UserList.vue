@@ -237,7 +237,108 @@
 .h7 {
   color: #CE0000;
 }
+@media (max-width: 768px) {
+  /* 調整 .container-inside 的顯示方式 */
+  .container-inside {
+    flex-direction: column;
+  }
 
+  /* 左側邊欄調整 */
+  .left-sidebar {
+    width: 100%; /* 使邊欄佔據整個螢幕寬度 */
+    margin-bottom: 20px; /* 增加下方距離 */
+  }
+
+  .left-sidebar hr {
+    width: 90%; /* 增加 hr 的寬度 */
+    margin-left: 5%; /* 確保 hr 保持居中 */
+  }
+
+  .search-area {
+    margin-left: 0;
+    width: 100%; /* 使搜尋區域佔據整個邊欄寬度 */
+  }
+
+  .search-area input {
+    width: calc(100% - 40px); /* 調整輸入框寬度以適應搜尋圖示 */
+    margin-left: 5%;
+  }
+
+  .search-icon {
+    right: 30px; /* 調整搜尋圖示的位置 */
+  }
+
+  .widget_categories ul li {
+    margin-left: 5%; /* 調整左邊距 */
+    width: 90%; /* 確保分類項目在小螢幕上保持適當的寬度 */
+  }
+
+  .widget-title {
+    padding-left: 5%; /* 調整標題的左邊距 */
+  }
+
+  /* 調整右側內容區域 */
+  .col-md-9 {
+    width: 100%; /* 使右側內容區域佔據整個螢幕寬度 */
+    margin-bottom: 20px; /* 增加下方距離 */
+  }
+
+  .content-top {
+    flex-direction: column; /* 改為垂直排列 */
+    align-items: flex-start; /* 左對齊 */
+  }
+
+  .main-title {
+    margin-bottom: 10px; /* 增加下方距離 */
+  }
+
+  .content-top-right {
+    margin-left: 0;
+  }
+
+  .breadcrumb {
+    margin-top: 10px; /* 增加上方距離 */
+  }
+
+  .product-grid {
+    gap: 10px; /* 調整商品間的間距 */
+  }
+
+  .product-item {
+    flex: 1 1 100%; /* 每個商品佔據整個螢幕寬度 */
+    padding: 5px; /* 減少內邊距 */
+  }
+
+  .product-item-list {
+    height: auto; /* 使商品圖片自適應高度 */
+  }
+
+  .title-cart {
+    flex-direction: column; /* 使商品標題與購物車按鈕垂直排列 */
+    align-items: flex-start; /* 左對齊 */
+  }
+
+  .title-cart p {
+    margin-bottom: 10px; /* 增加下方距離 */
+  }
+
+  .title-cart .btn {
+    margin-top: 5px; /* 增加上方距離 */
+  }
+
+  .price {
+    flex-direction: column; /* 價格信息垂直排列 */
+    align-items: flex-start; /* 左對齊 */
+  }
+
+  .h5, .h6, .h7 {
+    font-size: 14px; /* 調整字體大小 */
+  }
+
+  .product-placeholder {
+    display: none; /* 在手機版上隱藏占位符 */
+  }
+}
 </style>
 
 <script>
