@@ -4,7 +4,7 @@
   <div class="col-md-7 mx-auto">
     <div class="top">
       <ul>
-        <li>首頁</li>
+        <li><router-link to="/" class="cart-router">首頁</router-link></li>
         <li>/</li>
         <li>購物車</li>
       </ul>
@@ -157,5 +157,9 @@ export default {
 .top ul li {
   list-style-type: none;
   margin-right: 7px;
+}
+.cart-router {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
