@@ -345,16 +345,22 @@ header {
 #carouselExampleControls {
   margin-left: 50px; /* 調整side-nav的寬度 */
   padding-top: 50px;
+  max-width: 600px;
 
 }
 .carousel-item img {
   object-fit: cover; /* 避免圖片拉伸 */
   border-radius: 5px;
-  max-width: 600px;
+  width: 100%;
+}
+.carousel-inner img {
+  width: 100%;
+  height: auto; /* 確保圖片按比例縮放 */
 }
 .carousel-indicators button {
   background-color: #000; /* 指示器的颜色 */
 }
+
 .seperator {
   height: 100px;
 }
