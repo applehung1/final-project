@@ -2,7 +2,7 @@
   <header>
       <nav class="navbar navbar-white bg-white">
         <div class="logo">
-          <router-link class="navbar-brand" to="/user/cart"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
+          <router-link class="navbar-brand" to="/"><img src="../assets/images/zhuzh_logo.png" alt="post"></router-link>
         </div>
         <div>
           <ul>
@@ -66,6 +66,10 @@
 .navbar li,.navbar-secondary {
   margin: 10px 20px 0px 40px;
 }
+.navbar ul li:hover .navbar-brand {
+  color: #DCC1B0;
+}
+
 .navbar-brand {
   font-size: 15px !important;
   color:#7c7575;

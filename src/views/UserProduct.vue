@@ -16,13 +16,13 @@
     <div class="row justify-content-center">
       <article class="col-5">
         <div class="text-center product-image-container">
-          <img :src="product.imageUrl" alt="" class="img-fluid mb-3 product-image">
+          <img :src="product.imageUrl" alt="" class="img-fluid mb-3 product-image" id="image_id">
         </div>
       </article>
       <div class="col-3 product-description-container">
         <h3>{{ product.title }}</h3>
         <br>
-        <div>{{ product.description }}</div>
+        <div class="productDescription">{{ product.description }}</div>
         <hr style="width: 100%;">
         <div class="h5" v-if="!product.price">{{ product.origin_price }} 元</div>
         <del class="h6" v-if="product.price">$ {{ product.origin_price }} </del>
@@ -56,9 +56,44 @@
       </div>
     </div>
     <div class="center-content col-8 mx-auto">
-      <p>商品特色</p>
+      <p style="color: #b78989;">商品特色</p>
       <hr>
       <div style="white-space: pre-wrap; text-align: left">{{ product.content }}</div>
+    </div>
+  </div>
+  <div class='seperator'></div>
+  <h2>您可能還會喜歡...</h2>
+  <hr>
+  <div class="container">
+    <!-- 商品列表 -->
+    <div class="row">
+      <div class="col-md-4 mb-4" v-for="item in graduateProducts" :key="item.id">
+        <div class="product-container">
+            <div class="product-image-grid" :key="item.id"
+                :style="{backgroundImage: `url(${item.imageUrl})`}"
+                @click="navigateToProduct(item.id)"
+            >
+            </div>
+          <div class="title-cart">
+            <p @click="navigateToProduct(item.id)">{{ item.title }}</p>
+            <div class="actions">
+              <button type="button" class="btn"
+                  :disabled="this.status.loadingItem === item.id"
+                  @click="addCart(item.id)">
+                <div v-if="this.status.loadingItem === item.id" class="spinner-grow spinner-grow-sm text-danger" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                    <i class="bi bi-cart-fill"></i>
+              </button>
+              <i
+                :class="favoriteItems.includes(item.id) ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
+                @click="addFavoriteButtom(item.id)"
+              ></i>
+            </div>
+          </div>
+          <p style="color: #CE0000;">${{ item.price }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,7 +112,9 @@ export default {
       status: {
         loadingItem: ''
       },
-      favorite: ''
+      favorite: '',
+      products: [],
+      favoriteItems: [] // 用於存儲已加入最愛的商品 ID
     }
   },
   methods: {
@@ -136,13 +173,72 @@ export default {
       if (isNaN(this.product.qty) || this.product.qty < 1) {
         this.product.qty = 1
       }
+    },
+    getProducts () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
+      this.isLoading = true
+      this.$http.get(url)
+        .then((response) => {
+          this.products = response.data.products
+          console.log('products:', response)
+          this.isLoading = false
+        })
+    },
+    navigateToProduct (id) {
+      this.$router.push(`/user/product/${id}`).then(() => {
+        window.location.reload()
+        // 頁面重新整理
+      })
+    },
+    addCart (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      this.status.loadingItem = id
+      const cart = {
+        product_id: id,
+        qty: 1
+      }
+      this.$http.post(url, { data: cart })
+        .then((res) => {
+          this.status.loadingItem = ''
+          console.log('addcart-res', res)
+          return this.getCart() // 確保返回的 Promise 是 this.getCart()
+        })
+        .then((res) => {
+          this.$emit('cart-updated', this.cart) // 發射事件通知父組件
+          console.log('觸發addCart', this.cartItemCount)
+        })
+    },
+    addFavoriteButtom (id) {
+      const favorites = JSON.parse(localStorage.getItem('favoriteItems')) || []
+      if (!favorites.includes(id)) {
+        favorites.push(id)
+        localStorage.setItem('favoriteItems', JSON.stringify(favorites))
+        this.favoriteItems = favorites // 更新狀態
+      } else {
+        // 如果已存在則從清單中移除
+        const index = favorites.indexOf(id)
+        if (index > -1) {
+          favorites.splice(index, 1)
+          localStorage.setItem('favoriteItems', JSON.stringify(favorites))
+          this.favoriteItems = favorites // 更新狀態
+        }
+      }
+      console.log('favorite emit:', id)
     }
   },
   created () {
     this.id = this.$route.params.productId
     this.getProduct()
+    this.getProducts()
   },
-  mixins: [cartMixin]
+  mixins: [cartMixin],
+  computed: {
+    graduateProducts () {
+      return this.products.filter(otherProduct => {
+        return otherProduct.category === this.product.category
+      }).slice(0, 3)
+    }
+  }
 }
 </script>
 
@@ -154,7 +250,7 @@ export default {
 .text-center {
   text-align: center;
 }
-.product-image {
+#image_id {
   height: 500px;
   width: auto;
 }
@@ -163,6 +259,13 @@ export default {
 }
 .product-description-container {
   padding-left: 50px; /* 調整段落左側距離 */
+}
+.product-description-container h3 {
+  color: #b78989;
+}
+.productDescription {
+  white-space: pre-wrap; /* 保留空格和換行符，自動換行 */
+  color: #5c4838c9;
 }
 .quantity-wrapper {
   display: flex;
@@ -203,6 +306,7 @@ export default {
   color: #ffffff; /* 鼠標懸停時的文字顏色 */
   border-color: #949494; /* 鼠標懸停時的邊框顏色 */
 }
+
 .center-content {
   text-align: center; /* 讓內部內容水平置中 */
 }

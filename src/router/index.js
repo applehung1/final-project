@@ -76,12 +76,10 @@ const routes = [
         children: [
           {
             path: 'overview',
-            name: 'overview',
             component: () => import('../views/about/AboutOverview.vue')
           },
           {
             path: ':articleId',
-            name: 'article',
             component: () => import('../views/about/AboutArticle.vue')
           }
         ]

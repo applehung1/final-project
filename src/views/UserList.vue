@@ -51,14 +51,20 @@
                    @click="getProduct(item.id)"></div>
                    <div class="title-cart">
                         <p @click="getProduct(item.id)">{{ item.title }}</p>
-                        <button type="button" class="btn"
-                            :disabled="this.status.loadingItem === item.id"
-                            @click="addCart(item.id)">
-                        <div v-if="this.status.loadingItem === item.id" class="spinner-grow spinner-grow-sm text-danger" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div class="actions">
+                          <button type="button" class="btn"
+                              :disabled="this.status.loadingItem === item.id"
+                              @click="addCart(item.id)">
+                          <div v-if="this.status.loadingItem === item.id" class="spinner-grow spinner-grow-sm text-danger" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                          </div>
+                              <i class="bi bi-cart-fill"></i>
+                          </button>
+                          <i
+                            :class="favoriteItems.includes(item.id) ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
+                            @click="addFavorite(item.id)"
+                          ></i>
                         </div>
-                            <i class="bi bi-cart-fill"></i>
-                        </button>
                    </div>
               </div>
               <div class="price">
@@ -198,15 +204,19 @@
   box-shadow: none; /* 移除按鈕的陰影，避免點擊後有陰影效果 */
   outline: none; /* 避免點擊後有外框 */
 }
-.title-cart .btn:hover {
-  color: #eb9a7adc; /* 滑鼠懸停時的顏色變化 */
-}
+
 .title-cart .btn:focus {
   outline: none; /* 移除點擊後的外框 */
   box-shadow: none; /* 移除點擊後的陰影 */
 }
 .title-cart .btn i {
   font-size: 16px;
+}
+.title-cart i {
+  color: #cc6c6c;
+}
+.title-cart i:hover {
+  color: #debaba;
 }
 .product-item p {
   padding-top: 15px;
@@ -360,7 +370,8 @@ export default {
       selectedSortOrder: '', // 預設排序方式
       status: {
         loadingItem: ''
-      }
+      },
+      favoriteItems: [] // 用於存儲已加入最愛的商品 ID
     }
   },
   methods: {
@@ -414,10 +425,28 @@ export default {
         default:
           break
       }
+    },
+    addFavorite (id) {
+      const favorites = JSON.parse(localStorage.getItem('favoriteItems')) || []
+      if (!favorites.includes(id)) {
+        favorites.push(id)
+        localStorage.setItem('favoriteItems', JSON.stringify(favorites))
+        this.favoriteItems = favorites // 更新狀態
+      } else {
+        // 如果已存在則從清單中移除
+        const index = favorites.indexOf(id)
+        if (index > -1) {
+          favorites.splice(index, 1)
+          localStorage.setItem('favoriteItems', JSON.stringify(favorites))
+          this.favoriteItems = favorites // 更新狀態
+        }
+      }
+      console.log('favorite emit:', id)
     }
   },
   created () {
     this.getProducts()
+    this.favoriteItems = JSON.parse(localStorage.getItem('favoriteItems')) || [] // 從localStorage中初始化
   },
   computed: {
     // 提取所有唯一的 category

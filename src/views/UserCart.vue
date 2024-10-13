@@ -1,5 +1,7 @@
 <template>
-  <Loading :active="isLoading"></Loading>
+  <div v-if="isLoading" class="loading-overlay">
+    <Loading :active="isLoading"></Loading>
+  </div>
   <!-- 購物車列表 -->
   <div class="col-md-7 mx-auto">
     <div class="top">
@@ -19,7 +21,7 @@
           <tr>
             <th></th>
             <th>品名</th>
-            <th style="width: 110px">數量</th>
+            <th style="width: 150px">數量</th>
             <th>單價</th>
           </tr>
         </thead>
@@ -41,11 +43,13 @@
               </td>
               <td>
                 <div class="input-group input-group-sm">
+                  <button class="btn btn-outline-secondary" @click="decrement(item)">-</button>
                   <input type="number" class="form-control"
                         min="1"
                         :disabled="item.id === status.loadingItem"
                         @change="updateCart(item)"
                         v-model.number="item.qty">
+                  <button class="btn btn-outline-secondary" @click="increment(item)">+</button>
                   <div class="input-group-text">/ {{ item.product.unit }}</div>
                 </div>
               </td>
@@ -75,14 +79,14 @@
           </button>
         </div>
       </div>
-    </div>
-    <div class="text-center mt-3">
-      <button class="btn btn-outline-secondary mx-2" type="button">
-        <router-link class="navbar-brand" to="/user/list">繼續購物</router-link>
-      </button>
-      <button class="btn btn-outline-secondary mx-2" type="button">
-        <router-link class="navbar-brand" to="/user/checkinfo">前往結帳</router-link>
-      </button>
+      <div class="text-center mt-3">
+        <button class="btn btn-outline-secondary mx-2" type="button">
+          <router-link class="navbar-brand" to="/user/list">繼續購物</router-link>
+        </button>
+        <button class="btn btn-outline-secondary mx-2" type="button">
+          <router-link class="navbar-brand" to="/user/checkinfo">前往結帳</router-link>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -143,6 +147,16 @@ export default {
           this.$emit('cart-updated', this.cart) // 發射事件通知父組件
           console.log('觸發removeCartItem', this.cartItemCount)
         })
+    },
+    increment (item) {
+      item.qty += 1
+      this.updateCart(item)
+    },
+    decrement (item) {
+      if (item.qty > 1) {
+        item.qty -= 1
+        this.updateCart(item)
+      }
     }
   },
   mixins: [cartMixin]
@@ -150,6 +164,9 @@ export default {
 </script>
 
 <style>
+.loading-overlay {
+  z-index: 1;
+}
 .top ul{
   display: flex;
   justify-content: flex-end
